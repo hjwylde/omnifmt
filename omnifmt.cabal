@@ -6,7 +6,7 @@ maintainer:     public@hjwylde.com
 homepage:       https://github.com/hjwylde/omnifmt
 
 synopsis:       A pretty-printer wrapper to faciliate ease of formatting during development.
-description:    omnifmt automatically formats code by using external pretty-printers.
+description:    omnifmt automatically formats code via external pretty-printers.
                 The idea was taken from gofmt, just with a bit of expansion to more languages.
 
 license:        BSD3

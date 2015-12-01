@@ -6,8 +6,9 @@
 [![omnifmt on Stackage LTS](https://www.stackage.org/package/omnifmt/badge/lts)](https://www.stackage.org/lts/package/omnifmt)
 [![omnifmt on Stackage Nightly](https://www.stackage.org/package/omnifmt/badge/nightly)](https://www.stackage.org/nightly/package/omnifmt)
 
-omnifmt was created to make prettifying code easy.
-It provides an easy to use command that formats code through external pretty-printers.
+A pretty-printer wrapper to faciliate ease of formatting during development.
+omnifmt automatically formats code via external pretty-printers.
+The idea was taken from gofmt, just with a bit of expansion to more languages.
 
 Formatted code is:
 
