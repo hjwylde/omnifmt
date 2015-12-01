@@ -1,0 +1,7 @@
+resolver: lts-3.16
+ghc-options:
+    omnifmt: -Werror -Wall -fno-warn-name-shadowing
+
+packages:
+- '.'
+
