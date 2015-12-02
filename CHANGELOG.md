@@ -2,6 +2,8 @@
 
 #### Upcoming
 
+#### v0.2.0.0
+
 *Major*
 * Removed `checkFileExists` from the pipeline (moved to `handle`). ([#12](https://github.com/hjwylde/omnifmt/issues/12))
 
