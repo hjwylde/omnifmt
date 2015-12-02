@@ -7,4 +7,5 @@
 
 *Revisions*
 * Fixed a bug in the nearest config file search algorithm. ([#7](https://github.com/hjwylde/omnifmt/issues/7))
+* Fixed a bug where output files could be created outside of the temp directory. ([#11](https://github.com/hjwylde/omnifmt/issues/11))
 
