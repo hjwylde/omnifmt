@@ -24,8 +24,7 @@ module Omnifmt.Pipes (
     omnifmt,
 
     -- * Transformers
-    select, checkFileSupported, checkFileExists, runProgram, checkFilePretty, commit, diff,
-    printFileStatus,
+    select, checkFileSupported, runProgram, checkFilePretty, commit, diff, printFileStatus,
 ) where
 
 import Control.Monad.Except
@@ -52,7 +51,6 @@ import System.FilePath
 data Status = Unknown       -- ^ The file has not been processed.
             | Error         -- ^ An error occurred somewhere.
             | Unsupported   -- ^ The file type is unsupported (i.e., no applicable 'Program').
-            | NotFound      -- ^ The file could not be found.
             | Timeout       -- ^ A command timed out.
             | Pretty        -- ^ The file is pretty.
             | Ugly          -- ^ The file is ugly.
@@ -75,13 +73,6 @@ checkFileSupported = select [Unknown] $ \item@(_, uglyFilePath, prettyFilePath) 
     ask >>= \config -> if supported config . T.toLower . T.pack . drop 1 $ takeExtension uglyFilePath
         then return item
         else return (Unsupported, uglyFilePath, prettyFilePath)
-
--- | Checks all 'Unknown' ugly file paths to see if they exist.
-checkFileExists :: MonadIO m => Pipe (Status, FilePath, FilePath) (Status, FilePath, FilePath) m ()
-checkFileExists = select [Unknown] $ \item@(_, uglyFilePath, prettyFilePath) ->
-    ifM (liftIO $ doesFileExist uglyFilePath)
-        (return item)
-        (return (NotFound, uglyFilePath, prettyFilePath))
 
 -- | Runs the applicable 'Program''s command on all 'Unknown' files.
 --   This reads in the ugly file path and writes out to the pretty file path.
@@ -151,8 +142,5 @@ diff = select [Ugly] $ \item@(_, uglyFilePath, prettyFilePath) -> do
 -- | Logs the status of each file using the given function.
 printFileStatus :: MonadLogger m => (Status -> Text -> m ()) -> Pipe (Status, FilePath, FilePath) (Status, FilePath, FilePath) m ()
 printFileStatus f = Pipes.mapM_ $ \(status, uglyFilePath, _) ->
-    f status (T.pack $ uglyFilePath ++ ": " ++ showStatus status)
-    where
-        showStatus NotFound = "not found"
-        showStatus status   = lower $ show status
+    f status (T.pack $ uglyFilePath ++ ": " ++ lower (show status))
 

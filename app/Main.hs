@@ -35,9 +35,10 @@ import qualified Data.Text.Encoding as T
 import qualified Data.Text.IO       as T
 import           Data.Time          (defaultTimeLocale, formatTime, getZonedTime)
 
-import Omnifmt.Config  as Config
+import Omnifmt.Config    as Config
+import Omnifmt.Directory
 import Omnifmt.Exit
-import Omnifmt.Options hiding (omnifmt)
+import Omnifmt.Options   hiding (omnifmt)
 import Omnifmt.Pipes
 
 import Options.Applicative
@@ -47,7 +48,7 @@ import           Pipes.Concurrent
 import qualified Pipes.Prelude    as Pipes
 import           Prelude          hiding (filter, log)
 
-import System.Directory.Extra
+import System.Directory.Extra hiding (withCurrentDirectory)
 import System.FilePath
 import System.IO
 import System.IO.Temp
@@ -74,20 +75,19 @@ main = do
 
 handle :: (MonadIO m, MonadLogger m, MonadMask m, MonadParallel m, MonadReader Config m) => Options -> m ()
 handle options = do
-    rootDir         <- liftIO getCurrentDirectory
-    filePaths       <- runPanic $ if null (argPaths options)
-        then ask >>= expandDirectory . takeDirectory . fromJust . source
+    rootDir             <- ask >>= liftIO . canonicalizePath . takeDirectory . fromJust . source
+    absFilePaths        <- runPanic $ if null (argPaths options)
+        then expandDirectory rootDir
         else providedFilePaths options
-    absFilePaths    <- forM filePaths $ \filePath -> ifM (liftIO $ doesFileExist filePath)
-        (liftIO $ canonicalizePath filePath) (return filePath)
+    let relFilePaths    = uniq $ map (makeRelative rootDir) absFilePaths
 
     numThreads <- liftIO getNumCapabilities >>= \numCapabilities ->
         return $ fromMaybe numCapabilities (optThreads options)
 
     (output, input) <- liftIO $ spawn unbounded
 
-    withSystemTempDirectory "omnifmt" $ \tmpDir -> do
-        runEffect $ each (map (\filePath -> omnifmt (makeRelative rootDir filePath) (tmpDir </> dropDrive filePath)) absFilePaths) >-> toOutput output
+    withCurrentDirectory rootDir . withSystemTempDirectory "omnifmt" $ \tmpDir -> do
+        runEffect $ each (map (\filePath -> omnifmt filePath (tmpDir </> filePath)) relFilePaths) >-> toOutput output
 
         liftIO performGC
 
@@ -96,7 +96,7 @@ handle options = do
             liftIO performGC
 
 providedFilePaths :: MonadIO m => Options -> m [FilePath]
-providedFilePaths options = concatMapM expandDirectory $ concatMap splitter (argPaths options)
+providedFilePaths options = concatMapM (liftIO . canonicalizePath >=> expandDirectory) $ concatMap splitter (argPaths options)
     where
         splitter = if optNull options then linesBy (== '\0') else (:[])
 
@@ -104,7 +104,7 @@ expandDirectory :: MonadIO m => FilePath -> m [FilePath]
 expandDirectory path = ifM (liftIO $ doesDirectoryExist path) (liftIO $ listFilesRecursive path) (return [path])
 
 pipeline :: (MonadIO m, MonadLogger m, MonadReader Config m) => Pipe (Status, FilePath, FilePath) (Status, FilePath, FilePath) m ()
-pipeline = checkFileSupported >-> checkFileExists >-> createPrettyFile >-> runProgram >-> checkFilePretty
+pipeline = checkFileSupported >-> createPrettyFile >-> runProgram >-> checkFilePretty
     where
         createPrettyFile = select [Unknown] $ \item@(_, _, prettyFilePath) -> do
             liftIO $ createDirectoryIfMissing True (takeDirectory prettyFilePath)
