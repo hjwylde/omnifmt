@@ -27,7 +27,7 @@ import           Control.Monad.Parallel (MonadParallel (..))
 import qualified Control.Monad.Parallel as Parallel
 import           Control.Monad.Reader
 
-import           Data.List.Extra    (dropEnd, linesBy, lower)
+import           Data.List.Extra    (dropEnd, linesBy, lower, nub)
 import           Data.Maybe         (fromJust, fromMaybe, isNothing)
 import           Data.Text          (Text)
 import qualified Data.Text          as T
@@ -79,7 +79,7 @@ handle options = do
     absFilePaths        <- runPanic $ if null (argPaths options)
         then expandDirectory rootDir
         else providedFilePaths options
-    let relFilePaths    = uniq $ map (makeRelative rootDir) absFilePaths
+    let relFilePaths    = nub $ map (makeRelative rootDir) absFilePaths
 
     numThreads <- liftIO getNumCapabilities >>= \numCapabilities ->
         return $ fromMaybe numCapabilities (optThreads options)
@@ -118,9 +118,9 @@ runner Diff     = diff      >-> Pipes.drain
 
 logFunction :: MonadLogger m => Status -> Text -> m ()
 logFunction status
-    | status `elem` [Unknown, Error, Timeout]       = logWarnN
-    | status `elem` [Unsupported, NotFound, Pretty] = logDebugN
-    | otherwise                                     = logInfoN
+    | status `elem` [Unknown, Error, Timeout]   = logWarnN
+    | status `elem` [Unsupported, Pretty]       = logDebugN
+    | otherwise                                 = logInfoN
 
 filter :: Chatty -> LoggingT m a -> LoggingT m a
 filter Quiet    = filterLogger (\_ level -> level >= LevelError)

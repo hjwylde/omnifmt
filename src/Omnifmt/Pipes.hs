@@ -28,7 +28,6 @@ module Omnifmt.Pipes (
 ) where
 
 import Control.Monad.Except
-import Control.Monad.Extra
 import Control.Monad.Logger
 import Control.Monad.Reader
 
