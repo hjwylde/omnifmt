@@ -2,6 +2,12 @@
 
 #### Upcoming
 
+*Major*
+* Removed `checkFileExists` from the pipeline (moved to `handle`). ([#12](https://github.com/hjwylde/omnifmt/issues/12))
+
+*Revisions*
+* Changed path outputs to be relative to the root directory. ([#12](https://github.com/hjwylde/omnifmt/issues/12))
+
 #### v0.1.0.0
 
 *Major*
