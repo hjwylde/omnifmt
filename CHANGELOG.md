@@ -2,9 +2,11 @@
 
 #### Upcoming
 
+#### v0.2.1.0
+
 *Minor*
 
-* Added bash completion for `--mode` and arguments. ([#13](https://github.com/hjwylde/omnifmt/issues/13))
+* Added Bash completion for `--mode` and arguments. ([#13](https://github.com/hjwylde/omnifmt/issues/13))
 
 *Revisions*
 
