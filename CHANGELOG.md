@@ -2,6 +2,12 @@
 
 #### Upcoming
 
+*Minor*
+* Added bash completion for `--mode` and arguments. ([#13](https://github.com/hjwylde/omnifmt/issues/13))
+
+*Revisions*
+* Fixed a bug that disallowed global info options in a non-omnifmt directory. ([#13](https://github.com/hjwylde/omnifmt/issues/13))
+
 #### v0.2.0.0
 
 *Major*

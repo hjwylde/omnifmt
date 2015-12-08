@@ -21,6 +21,7 @@ module Omnifmt.Options (
 import Data.Char    (isDigit)
 import Data.Version (showVersion)
 
+import Omnifmt.Config  as Config
 import Omnifmt.Version as This
 
 import Options.Applicative
@@ -52,17 +53,19 @@ omnifmtPrefs = prefs $ columns 100
 
 -- | An optparse parser of a omnifmt command.
 omnifmtInfo :: ParserInfo Options
-omnifmtInfo = info (infoOptions <*> omnifmt) fullDesc
+omnifmtInfo = info (infoOptions <*> omnifmt) (fullDesc <> progDesc')
     where
-        infoOptions = helper <*> version <*> numericVersion
-        version = infoOption ("Version " ++ showVersion This.version) $ mconcat [
+        infoOptions     = helper <*> version <*> numericVersion
+        version         = infoOption ("Version " ++ showVersion This.version) $ mconcat [
             long "version", short 'V', hidden,
             help "Show this binary's version"
             ]
-        numericVersion = infoOption (showVersion This.version) $ mconcat [
+        numericVersion  = infoOption (showVersion This.version) $ mconcat [
             long "numeric-version", hidden,
             help "Show this binary's version (without the prefix)"
             ]
+
+        progDesc' = progDesc $ "Formats the paths given by applying the rules found in the root `" ++ Config.defaultFileName ++ "'"
 
 -- | An options parser.
 omnifmt :: Parser Options
@@ -84,6 +87,7 @@ omnifmt = Options
     <*> modeOption (mconcat [
         long "mode", short 'm', metavar "MODE",
         value Normal, showDefaultWith $ const "normal",
+        completeWith ["normal", "dry-run", "diff"],
         help "Specify the mode as either `normal', `dry-run' or `diff'"
         ])
     <*> natOption (mconcat [
@@ -92,7 +96,8 @@ omnifmt = Options
         help "Specify the number of threads to use"
         ])
     <*> many (strArgument $ mconcat [
-        metavar "-- PATHS..."
+        metavar "-- PATHS...",
+        action "file"
         ])
     where
         natOption   = option $ readerAsk >>= \opt -> if all isDigit opt

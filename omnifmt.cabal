@@ -33,6 +33,7 @@ executable omnifmt
 
     default-language: Haskell2010
     other-extensions:
+        BangPatterns
         FlexibleContexts
         MultiParamTypeClasses
         OverloadedStrings

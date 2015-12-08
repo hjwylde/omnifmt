@@ -105,3 +105,20 @@ Just don't forget to actually call the config file '.omnifmt.yaml'!
 
 **NB:** I haven't tested them fully, be careful in case one is buggy.
 
+### Auto-completion
+
+Add the following (depending on your shell) to include support for auto-completion.
+
+**Bash:**
+
+```bash
+source <(omnifmt --bash-completion-script `which omnifmt`)
+```
+
+**zsh:**
+
+```zsh
+autoload -Uz bashcompinit && bashcompinit
+source <(omnifmt --bash-completion-script `which omnifmt`)
+```
+
