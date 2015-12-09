@@ -6,7 +6,7 @@
 
 *Revisions*
 
-* Fixed a bug that disallowed global info options in a non-omnifmt directory. ([#13](https://github.com/hjwylde/omnifmt/issues/13))
+* Fixed a bug causing prettifying to fail across filesystem boundaries. ([#14](https://github.com/hjwylde/omnifmt/issues/14))
 
 #### v0.2.1.0
 
