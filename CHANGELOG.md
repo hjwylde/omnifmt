@@ -2,6 +2,10 @@
 
 #### Upcoming
 
+*Revisions*
+
+* Fixed a bug that disallowed global info options in a non-omnifmt directory. ([#13](https://github.com/hjwylde/omnifmt/issues/13))
+
 #### v0.2.1.0
 
 *Minor*
@@ -12,6 +16,12 @@
 
 * Fixed a bug that disallowed global info options in a non-omnifmt directory. ([#13](https://github.com/hjwylde/omnifmt/issues/13))
 
+#### v0.2.0.1
+
+*Revisions*
+
+* Fixed a bug causing prettifying to fail across filesystem boundaries. ([#14](https://github.com/hjwylde/omnifmt/issues/14))
+
 #### v0.2.0.0
 
 *Major*
@@ -21,6 +31,12 @@
 *Revisions*
 
 * Changed path outputs to be relative to the root directory. ([#12](https://github.com/hjwylde/omnifmt/issues/12))
+
+#### v0.1.0.1
+
+*Revisions*
+
+* Fixed a bug causing prettifying to fail across filesystem boundaries. ([#14](https://github.com/hjwylde/omnifmt/issues/14))
 
 #### v0.1.0.0
 
