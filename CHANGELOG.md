@@ -2,6 +2,8 @@
 
 #### Upcoming
 
+#### v0.1.0.1
+
 *Revisions*
 
 * Fixed a bug causing prettifying to fail across filesystem boundaries. ([#14](https://github.com/hjwylde/omnifmt/issues/14))
