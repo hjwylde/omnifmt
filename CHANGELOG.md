@@ -2,6 +2,8 @@
 
 #### Upcoming
 
+#### v0.2.1.1
+
 *Revisions*
 
 * Fixed a bug that disallowed global info options in a non-omnifmt directory. ([#13](https://github.com/hjwylde/omnifmt/issues/13))
