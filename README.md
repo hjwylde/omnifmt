@@ -3,8 +3,6 @@
 [![Project Status: Wip - Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/1.0.0/wip.svg)](http://www.repostatus.org/#wip)
 [![Build Status](https://travis-ci.org/hjwylde/omnifmt.svg?branch=master)](https://travis-ci.org/hjwylde/omnifmt)
 [![Release](https://img.shields.io/github/release/hjwylde/omnifmt.svg)](https://github.com/hjwylde/omnifmt/releases/latest)
-[![omnifmt on Stackage LTS](https://www.stackage.org/package/omnifmt/badge/lts)](https://www.stackage.org/lts/package/omnifmt)
-[![omnifmt on Stackage Nightly](https://www.stackage.org/package/omnifmt/badge/nightly)](https://www.stackage.org/nightly/package/omnifmt)
 
 A pretty-printer wrapper to faciliate ease of formatting during development.
 omnifmt automatically formats code via external pretty-printers.
