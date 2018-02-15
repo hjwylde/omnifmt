@@ -4,4 +4,3 @@ ghc-options:
 
 packages:
 - '.'
-
