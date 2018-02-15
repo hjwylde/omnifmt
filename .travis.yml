@@ -28,9 +28,9 @@ before_install:
 install:
 - travis_wait stack $STACK_ARGS --no-terminal --skip-ghc-check setup
 - travis_wait stack $STACK_ARGS --no-terminal --skip-ghc-check test --only-snapshot
-- stack --resolver lts install hlint git-fmt stylish-haskell
+- stack --resolver lts install hlint stylish-haskell
 
 script:
 - stack $STACK_ARGS --no-terminal --skip-ghc-check test --test --copy-bins
 - hlint .
-- git fmt -m dry-run --operate-on-tracked
+- omnifmt -m dry-run
